@@ -1,0 +1,40 @@
+import { useEffect, useState } from 'react'
+import { supabase } from '../lib/supabase'
+import PostCard from '../components/PostCard'
+
+export default function Posts() {
+  const [posts, setPosts] = useState([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    supabase
+      .from('posts')
+      .select('*')
+      .eq('status', 'published')
+      .order('is_pinned', { ascending: false })
+      .order('created_at', { ascending: false })
+      .then(({ data }) => {
+        setPosts(data || [])
+        setLoading(false)
+      })
+  }, [])
+
+  return (
+    <div className="max-w-3xl mx-auto px-4 py-10">
+      <h1 className="font-display text-3xl text-chalk-100 mb-1">News &amp; Announcements</h1>
+      <p className="text-chalk-500 mb-8">Updates from the HUMEKA TV team.</p>
+
+      {loading && <p className="text-chalk-500">Loading…</p>}
+
+      {!loading && posts.length === 0 && (
+        <p className="text-chalk-500">No announcements yet. Check back soon.</p>
+      )}
+
+      <div className="space-y-6">
+        {posts.map((post) => (
+          <PostCard key={post.id} post={post} />
+        ))}
+      </div>
+    </div>
+  )
+}

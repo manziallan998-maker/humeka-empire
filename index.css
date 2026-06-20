@@ -1,0 +1,23 @@
+export default function LiveTicker({ items }) {
+  if (!items || items.length === 0) return null
+
+  const loopItems = [...items, ...items]
+
+  return (
+    <div className="bg-grass-500 text-pitch-950 overflow-hidden border-b border-pitch-950/20">
+      <div className="max-w-6xl mx-auto px-4 py-1.5 flex items-center gap-3 overflow-hidden">
+        <span className="flex items-center gap-1.5 font-display text-xs shrink-0 pr-3 border-r border-pitch-950/30">
+          <span className="live-dot" />
+          LIVE
+        </span>
+        <div className="ticker-track">
+          {loopItems.map((text, i) => (
+            <span key={i} className="text-sm font-semibold mx-6 whitespace-nowrap">
+              {text}
+            </span>
+          ))}
+        </div>
+      </div>
+    </div>
+  )
+}
